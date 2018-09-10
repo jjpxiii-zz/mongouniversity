@@ -1,0 +1,8 @@
+db.companies.aggregate([ 
+{$match:{$and:[{founded_year:2004}, 
+{"funding_rounds.4":{$exists:true}}]}}, 
+{$project:{name:1, "funding_rounds.raised_amount":1}},
+{$unwind:"$funding_rounds"},
+{$group: { _id: "$name", raisedAvg:{$avg:"$funding_rounds.raised_amount"}}},
+{$sort:{ raisedAvg:-1}}
+])
